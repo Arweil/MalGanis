@@ -1,0 +1,31 @@
+{
+  "name": "malganis",
+  "version": "1.0.0",
+  "description": "",
+  "browser": "index.js",
+  "scripts": {
+    "watch": "rollup --config --watch",
+    "build": "NODE_ENV=production rollup -c"
+  },
+  "author": "Milk",
+  "license": "ISC",
+  "dependencies": {
+    "history": "^4.7.2",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-router-redux": "^5.0.0-alpha.9",
+    "redux": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "rollup": "^0.65.2",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.1.6",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-uglify": "^5.0.2"
+  }
+}
