@@ -25,7 +25,7 @@ SSR可以是首屏渲染速度更快，而且有利于seo。但是针对中后�
     |- index.html // 项目模板文件
 ```
 
-## what means MalGanis
+## What means MalGanis
 ![Mal'Ganis](https://github.com/Arweil/MalGanis/blob/master/malganis.png)
 
 Mal'Ganis是炉石中的一个恶魔，用来增强恶魔属性包括[Jarxxus](https://github.com/Arweil/Jaraxxus)创建出来的地狱火，并且使使用者处于无敌状态。
