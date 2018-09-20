@@ -1,7 +1,7 @@
-import BaseController from './BaseController.jsx'
+import Controller from './controller'
 import app from './App.js'
 
 export * from 'react-redux'
 export * from 'react-router-dom'
-export { BaseController }
+export { Controller }
 export default app
