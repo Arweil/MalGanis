@@ -6,25 +6,17 @@ export default class MainCtrl extends Controller {
   constructor() {
     super()
     this.View = View;
-
-    this.state = {
-      test: 1
-    }
-
-    console.log(`page ctrl constructor`)
   }
 
-  componentWillMount() {
-    console.log('page ctrl componentWillMount')
+  pageWillMount() {
+    console.log('page ctrl pageWillMount')
   }
 
-  componentFirstMount() {
-    console.log('page ctrl componentFirstMount')
+  pageFirstMount() {
+    console.log('page ctrl pageFirstMount')
   }
 
-  componentDidMount() {
-    // await this.setStateAsync({ test: 2 })
-    // console.log(this.state.test)
-    console.log(`page ctrl componentDidMount`)
+  pageDidMount() {
+    console.log('page ctrl pageDidMount')
   }
 }

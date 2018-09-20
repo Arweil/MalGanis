@@ -6,8 +6,6 @@ export default class CtrlProxy extends Component {
     this.state = {
       test: 1
     }
-
-    console.log('CtrlProxy constructor')
   }
 
   emit(method) {
@@ -19,33 +17,16 @@ export default class CtrlProxy extends Component {
   }
 
   componentWillMount() {
-    this.emit('componentWillMount');
+    this.emit('pageWillMount');
   }
 
   async componentDidMount() {
     const { controller } = this.props;
     if (!controller.flag.mounted) {
-      this.emit('componentFirstMount');
+      this.emit('pageFirstMount');
       controller.flag.mounted = true;
     }
-    this.emit('componentDidMount');
-
-    for (let i = 0; i < 5; i++) {
-      await this.a();
-    }
-  }
-
-  async a() {
-    await Promise.resolve();
-    this.setState({
-      test: ++this.state.test
-    })
-  }
-
-  setStateAsync(obj) {
-    return new Promise((resolve) => {
-      this.setState(obj, resolve);
-    });
+    this.emit('pageDidMount');
   }
 
   render() {

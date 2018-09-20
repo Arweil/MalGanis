@@ -18,12 +18,19 @@ SSR可以是首屏渲染速度更快，而且有利于seo。但是针对中后�
     |- routers // 应用路由管理
         |- index.js // 路由入口
     |- services // 应用请求目录
+        |- index.js // 入口
     |- stores // 全局状态管理目录
         |- index.js // 状态管理入口
     |- index.js // 程序入口
 |- public
     |- index.html // 项目模板文件
 ```
+
+## 页面生命周期
+* pageWillMount
+* pageFirstMount
+* page view render
+* pageDidMount
 
 ## What means MalGanis
 ![Mal'Ganis](https://github.com/Arweil/MalGanis/blob/master/malganis.png)
