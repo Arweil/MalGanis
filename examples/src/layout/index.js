@@ -3,9 +3,9 @@ import propTypes from 'prop-types';
 import logo from '@/layout/logo.svg';
 import app from '@/layout/App.less';
 
-import { hot } from 'react-hot-loader';
+import { Link } from '../../../dist/GalGanis.js';
 
-import Main from '@/pages/Main/controller.js'
+import { hot } from 'react-hot-loader';
 
 class Layout extends Component {
   render() {
@@ -20,7 +20,11 @@ class Layout extends Component {
         <p className={app['App-intro']}>
           To get started, edit src/App.js and save to reload.
         </p>
-        <Main />
+
+        <Link to="/">Main</Link>
+        <Link to="/PageA">PageA</Link>
+
+        {children}
       </div>
     );
   }

@@ -13,10 +13,6 @@ const dev = {
   useEslint: false,
   showEslintErrorsInOverlay: true,
   before: function(app) {
-    app.get('/', (req, res, next) => {
-      console.log('devServer before');
-      next()
-    })
   },
   after: function(app) {
   }
