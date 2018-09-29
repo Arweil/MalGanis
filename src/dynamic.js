@@ -7,7 +7,11 @@ export default (config) => {
   const loadedUserComponent = () => {
     return promiseController().then((controller) => {
       const Controller = controller.default;
-      return new Controller().render()
+      const instance = new Controller();
+
+      instance.init(app);
+
+      return instance.render();
     })
   }
 

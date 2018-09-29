@@ -1,4 +1,14 @@
 export default {
-  initialState: {
+  namespace: 'main',
+  state: {
+    msg: 'init msg',
   },
+  reducers: {
+    getMessage (state, { msg }) {
+      return {
+        ...state,
+        msg
+      }
+    }
+  }
 }

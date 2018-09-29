@@ -7,6 +7,6 @@ import app from '../../dist/GalGanis.js'
 
 app({
   appRouter,
-  appStore,
+  appStore: () => { return {} },
   el: '#root'
 })

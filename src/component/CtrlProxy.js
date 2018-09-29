@@ -12,7 +12,7 @@ export default class CtrlProxy extends Component {
     const { controller } = this.props;
     const fun = controller[method];
     if (typeof fun === 'function') {
-      fun.call(this);
+      fun.call(controller);
     }
   }
 
@@ -20,7 +20,7 @@ export default class CtrlProxy extends Component {
     this.emit('pageWillMount');
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { controller } = this.props;
     if (!controller.flag.mounted) {
       this.emit('pageFirstMount');

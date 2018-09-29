@@ -18,7 +18,7 @@ class Layout extends Component {
           <h1 className={app['App-title']}>Welcome to React</h1>
         </header>
         <p className={app['App-intro']}>
-          To get started, edit src/App.js and save to reload.
+          This is Layout
         </p>
 
         <Link to="/">Main</Link>

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import TestA from './components/TestA';
+import TestAWrapper from './components/TestAWrapper';
 
-export default class MainView extends Component {
-  constructor(props) {
-    super(props)
-  }
+export default (props) => {
+  const { events } = props;
 
-  render() {
-    return (
-      <div>
-        <h1>This is Page View</h1>
-        <TestA />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <h1>This is Page View</h1>
+      <TestAWrapper />
+      <button onClick={events.onClick}>test event</button>
+    </div>
+  );
 }

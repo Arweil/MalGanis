@@ -2,10 +2,11 @@ import { Controller } from '../../../../dist/GalGanis.js';
 import View from './view.js';
 import Model from './model.js';
 
-export default class MainCtrl extends Controller {
+export default class PageACtrl extends Controller {
   constructor() {
     super()
     this.View = View;
+    this.Model = Model;
   }
 
   pageWillMount() {
