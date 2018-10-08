@@ -2,7 +2,7 @@ import { Controller } from '../../../../dist/GalGanis.js';
 import View from './view.js';
 import Model from './model.js';
 
-export default class CtrlPageA extends Controller {
+export default class CtrlPageB extends Controller {
   constructor() {
     super()
     this.View = View;

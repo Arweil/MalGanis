@@ -1,7 +1,7 @@
 const dev = {
   assetsPublicPath: '/',
   assetsSubDirectory: 'static',
-  cssModules: true,
+  cssModules: false,
   devtool: 'eval-source-map',
   port: 3000, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
   autoOpenBrowser: true,

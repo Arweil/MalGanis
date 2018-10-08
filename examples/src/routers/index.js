@@ -10,11 +10,23 @@ export default ({ app, history }) => {
         <Switch>
           <Route exact path="/" component={dynamic({
             app,
-            controller: () => import('@/pages/Main/controller.js')
+            controller: () => import('@/pages/PageA/controller.js')
           })} />
           <Route path="/PageA" component={dynamic({
             app,
             controller: () => import('@/pages/PageA/controller.js')
+          })} />
+          <Route path="/PageB" component={dynamic({
+            app,
+            controller: () => import('@/pages/PageB/controller.js')
+          })} />
+          <Route path="/PageC" component={dynamic({
+            app,
+            controller: () => import('@/pages/PageC/controller.js')
+          })} />
+          <Route path="/Main" component={dynamic({
+            app,
+            controller: () => import('@/pages/Main/controller.js')
           })} />
         </Switch>
       </Router>
