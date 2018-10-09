@@ -3,7 +3,7 @@ import ReactComponentExt from './component/ReactComponentExt'
 import app from './App.js'
 import dynamic from './dynamic.js'
 
-export * from 'react-redux'
+export { mvcConnect as connect } from './hoc/connect'
 export * from 'react-router-dom'
 export { Controller, ReactComponentExt, dynamic }
 export default app

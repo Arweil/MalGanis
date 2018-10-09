@@ -25,9 +25,10 @@ export default class MainCtrl extends Controller {
   }
 
   pageDidMount() {
-    this.store.dispatch({ type: 'getMessage', msg: 'hello redux' })
+    console.log('page ctrl pageDidMount')
+    this.store.actions.getMessage({ msg: 'hello redux' });
+    this.store.actions.getMessage1({ msg: 'hello redux1' });
     // console.log(this.store.getState())
     // console.log(this.store)
-    console.log('page ctrl pageDidMount')
   }
 }

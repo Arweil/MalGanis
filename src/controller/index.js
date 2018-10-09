@@ -33,13 +33,30 @@ export default class BaseController {
       app.mergeReducer(this.Model);
     }
 
-    this.store = app._store;
+    this.store = {
+      getState: app._store.getState,
+      actions: {}
+    }
+
+    const $this = this;
+    Object.keys(this.Model.reducers || {}).forEach((reducerKey) => {
+      $this.store.actions[reducerKey] = (payload) => {
+        app._store.dispatch({ type: reducerKey, ...payload })
+      }
+    })
   }
 
   render() {
     const { View, events } = this;
+
+    const componentContext = {
+      events,
+      state: this.store.getState(),
+      actions: this.store.actions,
+    }
+
     return (
-      <Root>
+      <Root context={componentContext}>
         <ViewProxy events={events} controller={this} view={View} />
         <CtrlProxy controller={this} />
       </Root>

@@ -9,6 +9,12 @@ export default {
         ...state,
         msg
       }
+    },
+    getMessage1: (state, { msg }) => {
+      return {
+        ...state,
+        msg
+      }
     }
   }
 }

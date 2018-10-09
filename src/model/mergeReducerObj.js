@@ -20,7 +20,8 @@ export default function finReducer(reducerObj, initialState) {
 
   return (state = initialState, action) => {
     return reducerList.reduce((accumulator, curReducer) => {
-      return curReducer(state, action)
+      // 上一个state作为入参
+      return curReducer(accumulator, action)
     }, state)
   }
 }

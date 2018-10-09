@@ -23,7 +23,7 @@ const config = {
       // }
     })
   ],
-  external: ['react', 'react-dom']
+  external: ['react', 'react-dom', 'prop-types']
 };
 
 if (process.env.NODE_ENV === 'production') {

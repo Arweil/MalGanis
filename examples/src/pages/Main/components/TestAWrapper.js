@@ -1,17 +1,10 @@
 import TestA from './TestA.js';
 import { connect } from '../../../../../dist/GalGanis';
 
-function mapStateToProps(state) {
+export default connect(({ state, events, actions }) => {
   return {
     router: state.router,
-    msg: state.main.msg
+    msg: state.main.msg,
+    getMessage: () => actions.getMessage({ msg: 'aaa' })
   }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getMessage: () => dispatch({ type: 'getMessage', msg: 'aaa' })
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TestA);
+})(TestA);

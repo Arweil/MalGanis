@@ -8,6 +8,7 @@ export default class CtrlProxy extends Component {
     }
   }
 
+  // 触发controller中的生命周期函数
   emit(method) {
     const { controller } = this.props;
     const fun = controller[method];
