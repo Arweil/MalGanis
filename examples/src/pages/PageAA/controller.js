@@ -2,17 +2,19 @@ import { Controller } from '../../../../dist/GalGanis.js';
 import View from './view.js';
 import Model from './model.js';
 
-export default class CtrlPageC extends Controller {
+export default class CtrlPageAA extends Controller {
   constructor() {
     super()
     this.View = View;
     this.Model = Model;
-
-    // this.combineEvents(events);
   }
 
   pageWillMount() {
     console.log('page ctrl pageWillMount')
+  }
+
+  pageFirstMount() {
+    console.log('page ctrl pageFirstMount')
   }
 
   pageDidMount() {

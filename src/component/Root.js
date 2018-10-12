@@ -7,7 +7,6 @@ export default class Root extends Component {
   }
 
   getChildContext() {
-    console.log(`getChildContext`)
     return this.props.context
   }
 

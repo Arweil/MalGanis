@@ -12,9 +12,13 @@ export default ({ app, history }) => {
             app,
             controller: () => import('@/pages/PageA/controller.js')
           })} />
-          <Route path="/PageA" component={dynamic({
+          <Route exact path="/PageA" component={dynamic({
             app,
             controller: () => import('@/pages/PageA/controller.js')
+          })} />
+          <Route path="/PageA/PageAA" component={dynamic({
+            app,
+            controller: () => import('@/pages/PageAA/controller.js')
           })} />
           <Route path="/PageB" component={dynamic({
             app,

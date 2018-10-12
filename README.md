@@ -27,10 +27,11 @@ SSR可以是首屏渲染速度更快，而且有利于seo。但是针对中后�
 ```
 
 ## 页面生命周期
-* pageWillMount
-* pageFirstMount
-* page view render
-* pageDidMount
+* getInitialState   改变初始state
+* pageBeforeRender  权限鉴定
+* pageWillMount     页面将要载入
+* pageDidMount      页面载入完毕，document加载完毕
+* pageWillUnMount   页面将要跳转
 
 ## What means MalGanis
 ![Mal'Ganis](https://github.com/Arweil/MalGanis/blob/master/malganis.png)

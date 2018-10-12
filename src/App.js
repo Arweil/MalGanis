@@ -15,6 +15,7 @@ import {
 
 let app = {
   _store: null,
+  _history: null,
   _appReducer: {},
   mergeReducer
 }
@@ -62,7 +63,9 @@ const baseRender = ({ store, history, appRouter }) => {
  * 创建app
  */
 export default ({ appRouter, appStore, el }) => {
-  const history = createHistory();
+  const history = createHistory({
+    getUserConfirmation: (message, callback) => callback(window.confirm(message))
+  });
 
   const middleware = routerMiddleware(history);
 
@@ -74,8 +77,9 @@ export default ({ appRouter, appStore, el }) => {
     compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
   );
   /* eslint-enable */
-
+  
   app._store = store;
+  app._history = history;
 
   const BaseRender = baseRender({ store, history, appRouter })
 

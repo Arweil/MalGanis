@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 export default class CtrlProxy extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      test: 1
-    }
   }
 
   // 触发controller中的生命周期函数
@@ -22,16 +19,14 @@ export default class CtrlProxy extends Component {
   }
 
   componentDidMount() {
-    const { controller } = this.props;
-    if (!controller.flag.mounted) {
-      this.emit('pageFirstMount');
-      controller.flag.mounted = true;
-    }
     this.emit('pageDidMount');
   }
 
+  componentWillUnmount() {
+    this.emit('pageWillUnMount');
+  }
+
   render() {
-    console.log('page render');
-    return (null);
+    return null;
   }
 }
