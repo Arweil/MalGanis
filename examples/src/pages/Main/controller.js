@@ -44,7 +44,12 @@ export default class MainCtrl extends Controller {
     // console.log(this.store)
   }
 
+<<<<<<< HEAD
   pageWillLeave() {
     console.log('page ctrl pageWillLeave')
+=======
+  pageWillUnMount() {
+    console.log('page ctrl pageWillUnMount')
+>>>>>>> df0838092b63e7a648028fd4bbe216cc27520384
   }
 }

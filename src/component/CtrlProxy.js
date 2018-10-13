@@ -22,7 +22,15 @@ export default class CtrlProxy extends Component {
     this.emit('pageDidMount');
   }
 
+  componentWillUnmount() {
+    this.emit('pageWillUnMount');
+  }
+
   render() {
+<<<<<<< HEAD
     return (null);
+=======
+    return null;
+>>>>>>> df0838092b63e7a648028fd4bbe216cc27520384
   }
 }
