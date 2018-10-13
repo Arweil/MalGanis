@@ -9,12 +9,14 @@ export function mvcConnect(mapToProps) {
         this.state = {
           stateProps: {}
         }
+
+        this.unsubscribe = null
       }
 
       componentWillMount() {
         const { store } = this.context
         this._updateProps()
-        store.subscribe(() => this._updateProps())
+        this.unsubscribe = store.subscribe(() => this._updateProps())
       }
 
       _updateProps() {
@@ -30,8 +32,12 @@ export function mvcConnect(mapToProps) {
         })
       }
 
+      componentWillUnmount() {
+        this.unsubscribe()
+      }
+
       render() {
-        return <WrappedComponent {...this.state.stateProps} />
+        return <WrappedComponent {...this.props} {...this.state.stateProps} />
       }
     }
 

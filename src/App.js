@@ -15,6 +15,7 @@ import {
 
 let app = {
   _store: null,
+  _history: null,
   _appReducer: {},
   mergeReducer
 }
@@ -76,6 +77,7 @@ export default ({ appRouter, appStore, el }) => {
   /* eslint-enable */
 
   app._store = store;
+  app._history = history;
 
   const BaseRender = baseRender({ store, history, appRouter })
 

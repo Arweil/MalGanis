@@ -12,23 +12,39 @@ export default class MainCtrl extends Controller {
     this.combineEvents(events);
   }
 
-  getInitialState() {
+  getInitialState(state) {
     console.log('page ctrl getInitialState')
+
+    return Promise.resolve({
+      ...state,
+      msg: 'new init msg'
+    });
+  }
+
+  pageBeforeRender() {
+    console.log('page ctrl pageBeforeRender')
+
+    return Promise.resolve();
   }
 
   pageWillMount() {
     console.log('page ctrl pageWillMount')
   }
 
-  pageFirstMount() {
-    console.log('page ctrl pageFirstMount')
-  }
-
   pageDidMount() {
     console.log('page ctrl pageDidMount')
     this.store.actions.getMessage({ msg: 'hello redux' });
     this.store.actions.getMessage1({ msg: 'hello redux1' });
+
+    // https://github.com/js-cookie/js-cookie
+    this.jsCookie.set('mvcTestCookie', 'success', { expires: 7 });
+    console.log(`get mvcTestCookie: ${this.jsCookie.get('mvcTestCookie')}`);
+
     // console.log(this.store.getState())
     // console.log(this.store)
+  }
+
+  pageWillLeave() {
+    console.log('page ctrl pageWillLeave')
   }
 }

@@ -2,16 +2,18 @@ import React from 'react';
 import CtrlProxy from '../component/CtrlProxy';
 import ViewProxy from '../component/ViewProxy';
 import Root from '../component/Root';
+import jsCookie from 'js-cookie';
 
 export default class BaseController {
   constructor() {
-    this.View = null
+    this.View = () => null
     this.Model = null
 
-    this.flag = {
-      mounted: false,
-    }
     this.events = {};
+
+    this.jsCookie = jsCookie;
+
+    this.history = null;
   }
 
   // 绑定 handler 的 this 值为 controller 实例
@@ -25,9 +27,21 @@ export default class BaseController {
     })
   }
 
-  init(app) {
+  async _init(app) {
+    // 处理页面初始化state
+    if (this.getInitialState) {
+      const newState = await this.getInitialState(this.Model.state).catch(() => {
+        return Promise.reject({
+          msg: `life cycle getInitialState error`
+        })
+      });
+      this.Model.state = newState
+    }
+
+    // bind events
     this.combineEvents(this);
 
+    // create page reducer
     if (this.Model) {
       this.Model.namespace = this.Model.namespace || this.constructor.name
       app.mergeReducer(this.Model);
@@ -38,26 +52,38 @@ export default class BaseController {
       actions: {}
     }
 
+    // store.actions
     const $this = this;
     Object.keys(this.Model.reducers || {}).forEach((reducerKey) => {
       $this.store.actions[reducerKey] = (payload) => {
         app._store.dispatch({ type: reducerKey, ...payload })
       }
     })
+
+    // create history
+    this.history = app._history;
   }
 
-  render() {
+  async _render() {
+    // pageBeforeRender 生命周期
+    if (this.pageBeforeRender) {
+      const newState = await this.pageBeforeRender().catch(() => {
+        return Promise.reject({
+          msg: `life cycle pageBeforeRender error`
+        })
+      });
+    }
+
     const { View, events } = this;
 
     const componentContext = {
       events,
-      state: this.store.getState(),
       actions: this.store.actions,
     }
 
     return (
       <Root context={componentContext}>
-        <ViewProxy events={events} controller={this} view={View} />
+        <ViewProxy view={View} />
         <CtrlProxy controller={this} />
       </Root>
     )

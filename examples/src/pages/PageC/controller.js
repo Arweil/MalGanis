@@ -11,16 +11,8 @@ export default class CtrlPageC extends Controller {
     // this.combineEvents(events);
   }
 
-  getInitialState() {
-    console.log('page ctrl getInitialState')
-  }
-
   pageWillMount() {
     console.log('page ctrl pageWillMount')
-  }
-
-  pageFirstMount() {
-    console.log('page ctrl pageFirstMount')
   }
 
   pageDidMount() {

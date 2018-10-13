@@ -5,13 +5,17 @@ export default (config) => {
   const { app, controller: promiseController } = config
 
   const loadedUserComponent = () => {
-    return promiseController().then((controller) => {
+    return promiseController().then(async (controller) => {
       const Controller = controller.default;
       const instance = new Controller();
 
-      instance.init(app);
-
-      return instance.render();
+      try {
+        await instance._init(app);
+        return instance._render();
+      } catch(err) {
+        console.error(err.msg);
+        return false;
+      }
     })
   }
 

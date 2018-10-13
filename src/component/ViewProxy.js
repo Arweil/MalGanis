@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
+import { mvcConnect } from '../hoc/connect';
 
-export default class componentName extends Component {
+class ViewProxy extends Component {
   render() {
     const View = this.props.view
-    const { events } = this.props
+    const { events, state } = this.props
     return (
-      <View events={events} />
+      <View events={events} state={state} />
     )
   }
 }
+
+export default mvcConnect(args => args)(ViewProxy)

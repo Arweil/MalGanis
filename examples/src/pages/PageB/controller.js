@@ -13,10 +13,6 @@ export default class CtrlPageB extends Controller {
     console.log('page ctrl pageWillMount')
   }
 
-  pageFirstMount() {
-    console.log('page ctrl pageFirstMount')
-  }
-
   pageDidMount() {
     console.log('page ctrl pageDidMount')
   }
