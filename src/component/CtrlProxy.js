@@ -27,10 +27,6 @@ export default class CtrlProxy extends Component {
   }
 
   render() {
-<<<<<<< HEAD
-    return (null);
-=======
     return null;
->>>>>>> df0838092b63e7a648028fd4bbe216cc27520384
   }
 }

@@ -31,12 +31,7 @@ SSR可以使首屏渲染速度更快，而且有利于seo。但是针对中后�
 * pageBeforeRender  权限鉴定
 * pageWillMount     页面将要载入
 * pageDidMount      页面载入完毕，document加载完毕
-<<<<<<< HEAD
-* pageWillLeave     页面将要跳转
-* windowWillLeave   浏览器将要关闭
-=======
 * pageWillUnMount   页面将要跳转
->>>>>>> df0838092b63e7a648028fd4bbe216cc27520384
 
 ## What means MalGanis
 ![Mal'Ganis](https://github.com/Arweil/MalGanis/blob/master/malganis.png)
