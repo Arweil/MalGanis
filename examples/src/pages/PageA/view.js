@@ -7,7 +7,7 @@ export default class View extends Component {
       <div>
         <h1>This is PageA</h1>
 
-        <Link to="/PageA/PageAA">Go To PageAA</Link>
+        <Link to="/PageA/PageAA/1">Go To PageAA</Link>
       </div>
     )
   }

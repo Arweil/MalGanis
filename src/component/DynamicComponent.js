@@ -15,7 +15,7 @@ export default class DynamicComponent extends Component {
   }
 
   async load() {
-    const m = await this.props.loadedUserComponent();
+    const m = await this.props.loadedUserComponent({ match: this.props.match });
     const AsyncComponent = m.default || m;
     if (this.mounted) {
       this.setState({

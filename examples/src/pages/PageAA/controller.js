@@ -19,5 +19,7 @@ export default class CtrlPageAA extends Controller {
 
   pageDidMount() {
     console.log('page ctrl pageDidMount')
+
+    console.log(this.location)
   }
 }

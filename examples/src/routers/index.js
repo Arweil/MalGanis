@@ -16,7 +16,7 @@ export default ({ app, history }) => {
             app,
             controller: () => import('@/pages/PageA/controller.js')
           })} />
-          <Route path="/PageA/PageAA" component={dynamic({
+          <Route path="/PageA/PageAA/:id" component={dynamic({
             app,
             controller: () => import('@/pages/PageAA/controller.js')
           })} />

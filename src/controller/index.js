@@ -3,6 +3,7 @@ import CtrlProxy from '../component/CtrlProxy';
 import ViewProxy from '../component/ViewProxy';
 import Root from '../component/Root';
 import jsCookie from 'js-cookie';
+import queryString from 'query-string';
 
 export default class BaseController {
   constructor() {
@@ -11,9 +12,12 @@ export default class BaseController {
 
     this.events = {};
 
-    this.jsCookie = jsCookie;
+    this.cookie = jsCookie;
+    this.queryString = queryString;
 
     this.history = null;
+
+    this.location = {};
   }
 
   // 绑定 handler 的 this 值为 controller 实例
@@ -27,7 +31,7 @@ export default class BaseController {
     })
   }
 
-  async _init(app) {
+  async _init({ app, match }) {
     // 处理页面初始化state
     if (this.getInitialState) {
       const newState = await this.getInitialState(this.Model.state).catch(() => {
@@ -62,6 +66,12 @@ export default class BaseController {
 
     // create history
     this.history = app._history;
+
+    this.location = {
+      query: this.queryString.parse(window.location.search),
+      hash: this.queryString.parse(window.location.hash),
+      params: match.params,
+    }
   }
 
   async _render() {

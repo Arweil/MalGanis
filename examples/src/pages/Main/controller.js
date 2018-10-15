@@ -37,8 +37,10 @@ export default class MainCtrl extends Controller {
     this.store.actions.getMessage1({ msg: 'hello redux1' });
 
     // https://github.com/js-cookie/js-cookie
-    this.jsCookie.set('mvcTestCookie', 'success', { expires: 7 });
-    console.log(`get mvcTestCookie: ${this.jsCookie.get('mvcTestCookie')}`);
+    this.cookie.set('mvcTestCookie', 'success', { expires: 7 });
+    console.log(`get mvcTestCookie: ${this.cookie.get('mvcTestCookie')}`);
+
+    console.log(this.location)
 
     // console.log(this.store.getState())
     // console.log(this.store)
