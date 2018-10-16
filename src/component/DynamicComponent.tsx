@@ -1,7 +1,19 @@
-import React, { Component } from 'react'
+import * as React from 'react'
+import { match } from 'react-router-dom'
 
-export default class DynamicComponent extends Component {
-  constructor(props) {
+interface DynamicComponentProps {
+  match: match,
+  loadedUserComponent: Function,
+}
+
+interface DynamicComponentState {
+  AsyncComponent: Function
+}
+
+export default class DynamicComponent extends React.Component<DynamicComponentProps, DynamicComponentState> {
+  private mounted: boolean;
+
+  constructor(props: any) {
     super(props)
     this.state = {
       AsyncComponent: null
@@ -22,6 +34,7 @@ export default class DynamicComponent extends Component {
         AsyncComponent
       })
     } else {
+      // @ts-ignore: 直接赋值无需触发渲染
       this.state.AsyncComponent = AsyncComponent
     }
   }

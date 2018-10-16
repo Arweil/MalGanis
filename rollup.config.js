@@ -6,7 +6,7 @@ import typescript from 'rollup-plugin-typescript'; // typescript支持
 import tslint from 'rollup-plugin-tslint'; // tslint支持
 
 const config = {
-  input: 'src/index.tsx',
+  input: 'src/index.ts',
   output: {
     file: './dist/GalGanis.js',
     format: 'umd',

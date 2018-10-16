@@ -1,20 +1,17 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { PropsStrFun } from '../types/index';
 
-interface ISomeObject {
-  [key: string]: Function;
+interface CtrlProxyProps {
+  controller: any,
 }
 
-interface Props {
-  controller: ISomeObject
-}
-
-export default class CtrlProxy extends Component<Props, {}> {
-  constructor(props) {
+export default class CtrlProxy extends React.Component<CtrlProxyProps> {
+  constructor(props: any) {
     super(props);
   }
 
   // 触发controller中的生命周期函数
-  emit(method: string) {
+  private emit(method: string) {
     const { controller } = this.props;
     const fun = controller[method];
     if (typeof fun === 'function') {
@@ -34,7 +31,7 @@ export default class CtrlProxy extends Component<Props, {}> {
     this.emit('pageWillUnMount');
   }
 
-  render(): JSX.Element {
+  render(): Function {
     return null;
   }
 }
