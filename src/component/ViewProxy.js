@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { mvcConnect } from '../hoc/connect';
+import { mvcConnect } from '../hoc/connect'
 
 class ViewProxy extends Component {
   render() {
