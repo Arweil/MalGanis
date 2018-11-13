@@ -1,18 +1,49 @@
-import React from 'react';
+import * as React from 'react';
 import CtrlProxy from '../component/CtrlProxy';
 import ViewProxy from '../component/ViewProxy';
 import Root from '../component/Root';
-import jsCookie from 'js-cookie';
-import queryString from 'query-string';
+import * as jsCookie from 'js-cookie';
+import * as queryString from 'query-string';
+import { PropsStrFun, PropsStrAny } from '../types/index';
+import { match } from 'react-router-dom';
+
+interface CtrlModel {
+  state: object,
+  reducers: object,
+  namespace: string,
+}
+
+interface CtrlStore {
+  getState: Function,
+  actions: PropsStrFun,
+}
+
+interface InitParams {
+  app: any,
+  match: match
+}
 
 export default class BaseController {
+  protected View: React.SFC;
+  protected Model: CtrlModel;
+  protected store: CtrlStore;
+  protected events: PropsStrFun;
+  protected cookie: any;
+  protected queryString: any;
+  protected history: object;
+  protected location: object;
+
+  protected getInitialState: Function;
+  protected pageBeforeRender: Function;
+
   constructor() {
     this.View = () => null
     this.Model = null
 
     this.events = {};
 
-    this.cookie = jsCookie;
+    // @ts-ignore
+    this.cookie = jsCookie.default;
     this.queryString = queryString;
 
     this.history = null;
@@ -21,7 +52,7 @@ export default class BaseController {
   }
 
   // 绑定 handler 的 this 值为 controller 实例
-  combineEvents(source) {
+  combineEvents(source: PropsStrAny) {
     let { events } = this
     Object.keys(source).forEach(key => {
       let value = source[key]
@@ -31,7 +62,7 @@ export default class BaseController {
     })
   }
 
-  async _init({ app, match }) {
+  async _init({ app, match }: InitParams) {
     // 处理页面初始化state
     if (this.getInitialState) {
       const newState = await this.getInitialState(this.Model.state).catch(() => {
@@ -59,7 +90,7 @@ export default class BaseController {
     // store.actions
     const $this = this;
     Object.keys(this.Model.reducers || {}).forEach((reducerKey) => {
-      $this.store.actions[reducerKey] = (payload) => {
+      $this.store.actions[reducerKey] = (payload: object) => {
         app._store.dispatch({ type: reducerKey, ...payload })
       }
     })
@@ -92,9 +123,9 @@ export default class BaseController {
     }
 
     return (
-      <Root context={componentContext}>
-        <ViewProxy view={View} />
-        <CtrlProxy controller={this} />
+      <Root context={ componentContext } >
+        <ViewProxy view={ View } />
+        <CtrlProxy controller={ this } />
       </Root>
     )
   }

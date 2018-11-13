@@ -1,8 +1,7 @@
-export function checkType(params) {
+export function checkType(params: any): boolean {
   return Object.prototype.toString.call(params);
 }
 
-export function isObject(obj) {
+export function isObject(obj: object): boolean {
   return Object.prototype.toString.call(obj) === '[object Object]';
 }
-

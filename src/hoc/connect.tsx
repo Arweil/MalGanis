@@ -1,16 +1,28 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
+import * as PropTypes from 'prop-types'
 
-export function mvcConnect(mapToProps) {
-  return (WrappedComponent) => {
-    class Connector extends Component {
-      constructor() {
-        super()
+interface ConnectorState {
+  stateProps: object
+}
+
+export function mvcConnect(mapToProps: Function) {
+  return (WrappedComponent: React.ComponentClass) => {
+    class Connector extends React.Component<any, ConnectorState> {
+      private unsubscribe: Function;
+      
+      constructor(props: any) {
+        super(props)
         this.state = {
           stateProps: {}
         }
 
         this.unsubscribe = null
+      }
+
+      static contextTypes = {
+        events: PropTypes.object,
+        actions: PropTypes.object,
+        store: PropTypes.object
       }
 
       componentWillMount() {
@@ -39,12 +51,6 @@ export function mvcConnect(mapToProps) {
       render() {
         return <WrappedComponent {...this.props} {...this.state.stateProps} />
       }
-    }
-
-    Connector.contextTypes = {
-      events: PropTypes.object,
-      actions: PropTypes.object,
-      store: PropTypes.object
     }
 
     return Connector;

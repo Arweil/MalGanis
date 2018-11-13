@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom';
+import { createStore, combineReducers, applyMiddleware, compose, Store } from 'redux'
 import { Provider } from 'react-redux'
 import createHistory from "history/createBrowserHistory";
+import { History } from 'history';
 
 import finReducer from './model/mergeReducerObj.js';
 
@@ -11,9 +12,30 @@ import {
   routerReducer,
   routerMiddleware,
   push
-} from "react-router-redux";
+} from 'react-router-redux';
 
-let app = {
+import { PropsStrFun } from './types';
+
+interface AppProps {
+  _store: Store,
+  _history: object,
+  _appReducer: PropsStrFun,
+  mergeReducer: Function
+}
+
+interface AppParams {
+  appRouter: Function,
+  appStore: {},
+  el: string
+}
+
+interface ModelProps {
+  namespace: string,
+  state: object,
+  reducers: PropsStrFun,
+}
+
+let app: AppProps = {
   _store: null,
   _history: null,
   _appReducer: {},
@@ -36,7 +58,7 @@ function createReducer() {
  * 合并页面reducer
  * @param {*} m model
  */
-function mergeReducer(m) {
+function mergeReducer(m: ModelProps) {
   if (!m.namespace || !m.reducers) {
     return;
   }
@@ -49,7 +71,7 @@ function mergeReducer(m) {
 /**
  * 应用最高层组件
  */
-const baseRender = ({ store, history, appRouter }) => {
+const baseRender = ({ store, history, appRouter }: { store: Store, history: History, appRouter: Function}) => {
   return () => (
     <Provider store={store}>
       <ConnectedRouter history={history}>
@@ -62,18 +84,19 @@ const baseRender = ({ store, history, appRouter }) => {
 /**
  * 创建app
  */
-export default ({ appRouter, appStore, el }) => {
+export default ({ appRouter, appStore, el }: AppParams) => {
   const history = createHistory({
     getUserConfirmation: (message, callback) => callback(window.confirm(message))
   });
 
   const middleware = routerMiddleware(history);
 
-  app._appReducer['app'] = appStore;
+  // app._appReducer['app'] = appStore;
 
   /* eslint-disable no-underscore-dangle */
   const store = createStore(
     createReducer(),
+    // @ts-ignore: redux dev tools
     compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
   );
   /* eslint-enable */
