@@ -1,23 +1,17 @@
-import * as React from 'react'
-import { match } from 'react-router-dom'
+import * as React from 'react';
+import { match } from 'react-router-dom';
+import { DynamicComponentProps, DynamicComponentState } from '../types';
 
-interface DynamicComponentProps {
-  match: match,
-  loadedUserComponent: Function,
-}
+export default class DynamicComponent
+  extends React.Component<DynamicComponentProps, DynamicComponentState> {
 
-interface DynamicComponentState {
-  AsyncComponent: Function
-}
-
-export default class DynamicComponent extends React.Component<DynamicComponentProps, DynamicComponentState> {
   private mounted: boolean;
 
   constructor(props: any) {
-    super(props)
+    super(props);
     this.state = {
-      AsyncComponent: null
-    }
+      AsyncComponent: null,
+    };
     this.mounted = false;
     this.load();
   }
@@ -27,15 +21,15 @@ export default class DynamicComponent extends React.Component<DynamicComponentPr
   }
 
   async load() {
-    const m = await this.props.loadedUserComponent({ match: this.props.match });
-    const AsyncComponent = m.default || m;
+    const m = await this.props.loadedUserComponent({ routerMatch: this.props.routerMatch });
+    const ASYNC_COMPONENT = m.default || m;
     if (this.mounted) {
       this.setState({
-        AsyncComponent
-      })
+        AsyncComponent: ASYNC_COMPONENT,
+      });
     } else {
       // @ts-ignore: 直接赋值无需触发渲染
-      this.state.AsyncComponent = AsyncComponent
+      this.state.AsyncComponent = ASYNC_COMPONENT;
     }
   }
 
@@ -43,9 +37,9 @@ export default class DynamicComponent extends React.Component<DynamicComponentPr
     const { AsyncComponent } = this.state;
 
     if (AsyncComponent) {
-      return AsyncComponent
+      return AsyncComponent;
     }
 
-    return null
+    return null;
   }
 }

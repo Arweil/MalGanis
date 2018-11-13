@@ -5,40 +5,24 @@ import Root from '../component/Root';
 import * as jsCookie from 'js-cookie';
 import * as queryString from 'query-string';
 import { PropsStrFun, PropsStrAny } from '../types/index';
-import { match } from 'react-router-dom';
-
-interface CtrlModel {
-  state: object,
-  reducers: object,
-  namespace: string,
-}
-
-interface CtrlStore {
-  getState: Function,
-  actions: PropsStrFun,
-}
-
-interface InitParams {
-  app: any,
-  match: match
-}
+import { AppModelObjProps, CtrlStoreObjProps, InitFunParams } from '../types';
 
 export default class BaseController {
-  protected View: React.SFC;
-  protected Model: CtrlModel;
-  protected store: CtrlStore;
+  protected view: React.SFC;
+  protected model: AppModelObjProps;
+  protected store: CtrlStoreObjProps;
   protected events: PropsStrFun;
   protected cookie: any;
   protected queryString: any;
   protected history: object;
   protected location: object;
 
-  protected getInitialState: Function;
-  protected pageBeforeRender: Function;
+  protected getInitialState: (state: any) => Promise<any>;
+  protected pageBeforeRender: () => Promise<any>;
 
   constructor() {
-    this.View = () => null
-    this.Model = null
+    this.view = () => null;
+    this.model = null;
 
     this.events = {};
 
@@ -53,47 +37,45 @@ export default class BaseController {
 
   // 绑定 handler 的 this 值为 controller 实例
   combineEvents(source: PropsStrAny) {
-    let { events } = this
-    Object.keys(source).forEach(key => {
-      let value = source[key]
+    Object.keys(source).forEach((key) => {
+      const value = source[key];
       if (key.startsWith('on') && typeof value === 'function') {
-        events[key] = value.bind(this)
+        this.events[key] = value.bind(this);
       }
-    })
+    });
   }
 
-  async _init({ app, match }: InitParams) {
+  private async init({ app, routerMatch }: InitFunParams) {
     // 处理页面初始化state
     if (this.getInitialState) {
-      const newState = await this.getInitialState(this.Model.state).catch(() => {
+      const newState = await this.getInitialState(this.model.state).catch(() => {
         return Promise.reject({
-          msg: `life cycle getInitialState error`
-        })
+          msg: 'life cycle getInitialState error',
+        });
       });
-      this.Model.state = newState
+      this.model.state = newState;
     }
 
     // bind events
     this.combineEvents(this);
 
     // create page reducer
-    if (this.Model) {
-      this.Model.namespace = this.Model.namespace || this.constructor.name
-      app.mergeReducer(this.Model);
+    if (this.model) {
+      this.model.namespace = this.model.namespace || this.constructor.name;
+      app.mergeReducer(this.model);
     }
 
     this.store = {
       getState: app._store.getState,
-      actions: {}
-    }
+      actions: {},
+    };
 
     // store.actions
-    const $this = this;
-    Object.keys(this.Model.reducers || {}).forEach((reducerKey) => {
-      $this.store.actions[reducerKey] = (payload: object) => {
-        app._store.dispatch({ type: reducerKey, ...payload })
-      }
-    })
+    Object.keys(this.model.reducers || {}).forEach((reducerKey) => {
+      this.store.actions[reducerKey] = (payload: object) => {
+        app._store.dispatch({ type: reducerKey, ...payload });
+      };
+    });
 
     // create history
     this.history = app._history;
@@ -101,32 +83,30 @@ export default class BaseController {
     this.location = {
       query: this.queryString.parse(window.location.search),
       hash: this.queryString.parse(window.location.hash),
-      params: match.params,
-    }
+      params: routerMatch.params,
+    };
   }
 
-  async _render() {
+  private async render() {
     // pageBeforeRender 生命周期
     if (this.pageBeforeRender) {
       const newState = await this.pageBeforeRender().catch(() => {
         return Promise.reject({
-          msg: `life cycle pageBeforeRender error`
-        })
+          msg: 'life cycle pageBeforeRender error',
+        });
       });
     }
 
-    const { View, events } = this;
-
     const componentContext = {
-      events,
+      events: this.events,
       actions: this.store.actions,
-    }
+    };
 
     return (
       <Root context={ componentContext } >
-        <ViewProxy view={ View } />
+        <ViewProxy view={ this.view } />
         <CtrlProxy controller={ this } />
       </Root>
-    )
+    );
   }
 }

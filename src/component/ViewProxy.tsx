@@ -1,27 +1,21 @@
-import * as React from 'react'
+import * as React from 'react';
 import { mvcConnect } from '../hoc/connect';
+import { ViewProxyComponentProps } from '../types';
 
-interface ViewProps {
-  events: object,
-  state: object,
-}
+class ViewProxy extends React.Component<ViewProxyComponentProps> {
+  constructor(props: any) {
+    super(props);
+  }
 
-interface ViewProxyProps {
-  events: object,
-  state: object,
-  view: React.ComponentClass<ViewProps, object>
-}
-
-class ViewProxy extends React.Component<ViewProxyProps> {
   render() {
-    const View = this.props.view
-    const { events, state } = this.props
+    const View = this.props.view;
+    const { events, state } = this.props;
     return (
       <View events={events} state={state} />
-    )
+    );
   }
 }
 
 export default mvcConnect((args: any) => {
-  return args
-})(ViewProxy)
+  return args;
+})(ViewProxy);

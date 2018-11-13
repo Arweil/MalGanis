@@ -1,46 +1,25 @@
-import * as React from 'react'
+import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { createStore, combineReducers, applyMiddleware, compose, Store } from 'redux'
-import { Provider } from 'react-redux'
-import createHistory from "history/createBrowserHistory";
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
+import { createBrowserHistory } from 'history';
 import { History } from 'history';
 
-import finReducer from './model/mergeReducerObj.js';
+import mergeReducerObj from './model/mergeReducerObj';
+import { AppObjProps, AppModelObjProps, AppFunParams, BaseRenderFunParams } from './types';
 
 import {
   ConnectedRouter,
   routerReducer,
   routerMiddleware,
-  push
 } from 'react-router-redux';
 
-import { PropsStrFun } from './types';
-
-interface AppProps {
-  _store: Store,
-  _history: object,
-  _appReducer: PropsStrFun,
-  mergeReducer: Function
-}
-
-interface AppParams {
-  appRouter: Function,
-  appStore: {},
-  el: string
-}
-
-interface ModelProps {
-  namespace: string,
-  state: object,
-  reducers: PropsStrFun,
-}
-
-let app: AppProps = {
+const app: AppObjProps = {
+  mergeReducer,
   _store: null,
   _history: null,
   _appReducer: {},
-  mergeReducer
-}
+};
 
 /**
  * 创建app全局reducer
@@ -48,22 +27,22 @@ let app: AppProps = {
 function createReducer() {
   const reducers = {
     router: routerReducer,
-    ...app._appReducer
-  }
+    ...app._appReducer,
+  };
 
-  return combineReducers(reducers)
+  return combineReducers(reducers);
 }
 
 /**
  * 合并页面reducer
  * @param {*} m model
  */
-function mergeReducer(m: ModelProps) {
+function mergeReducer(m: AppModelObjProps) {
   if (!m.namespace || !m.reducers) {
     return;
   }
 
-  app._appReducer[m.namespace] = finReducer(m.reducers, m.state);
+  app._appReducer[m.namespace] = mergeReducerObj(m.reducers, m.state);
 
   app._store.replaceReducer(createReducer());
 }
@@ -71,22 +50,22 @@ function mergeReducer(m: ModelProps) {
 /**
  * 应用最高层组件
  */
-const baseRender = ({ store, history, appRouter }: { store: Store, history: History, appRouter: Function}) => {
+const baseRender = ({ store, history, appRouter }: BaseRenderFunParams) => {
   return () => (
     <Provider store={store}>
       <ConnectedRouter history={history}>
         {appRouter({ app, history })}
       </ConnectedRouter>
     </Provider>
-  )
-}
+  );
+};
 
 /**
  * 创建app
  */
-export default ({ appRouter, appStore, el }: AppParams) => {
-  const history = createHistory({
-    getUserConfirmation: (message, callback) => callback(window.confirm(message))
+export default ({ appRouter, appStore, el }: AppFunParams) => {
+  const history: History = createBrowserHistory({
+    getUserConfirmation: (message, callback) => callback(window.confirm(message)),
   });
 
   const middleware = routerMiddleware(history);
@@ -96,19 +75,22 @@ export default ({ appRouter, appStore, el }: AppParams) => {
   /* eslint-disable no-underscore-dangle */
   const store = createStore(
     createReducer(),
-    // @ts-ignore: redux dev tools
-    compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    compose(
+      applyMiddleware(middleware),
+      // @ts-ignore: redux dev tools
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    )
   );
   /* eslint-enable */
-  
+
   app._store = store;
   app._history = history;
 
-  const BaseRender = baseRender({ store, history, appRouter })
+  const ComponentBaseRender = baseRender({ store, history, appRouter });
 
   if (el) {
-    ReactDOM.render(<BaseRender />, document.querySelector(el))
+    ReactDOM.render(<ComponentBaseRender />, document.querySelector(el));
   } else {
-    return <BaseRender />
+    return <ComponentBaseRender />;
   }
-}
+};

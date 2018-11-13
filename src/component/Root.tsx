@@ -1,19 +1,19 @@
-import * as React from 'react'
-import * as PropTypes from 'prop-types'
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 
 interface Props {
-  context: object
+  context: object;
 }
 
 export default class Root extends React.Component<Props> {
   static childContextTypes = {
     state: PropTypes.object,
     events: PropTypes.object,
-    actions: PropTypes.object
-  }
+    actions: PropTypes.object,
+  };
 
   getChildContext() {
-    return this.props.context
+    return this.props.context;
   }
 
   render() {
@@ -21,6 +21,6 @@ export default class Root extends React.Component<Props> {
       <div className="mvc-root">
         {this.props.children}
       </div>
-    )
+    );
   }
 }

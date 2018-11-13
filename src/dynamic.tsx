@@ -1,35 +1,29 @@
 import * as React from 'react';
-import DynamicComponent from './component/DynamicComponent.js';
-import { RouteComponentProps, match } from 'react-router-dom'
+import DynamicComponent from './component/DynamicComponent';
+import { RouteComponentProps, match } from 'react-router-dom';
+import { LoadedUserComponentProps, RouterConfigObjProps } from './types';
 
-interface configProps {
-  app: any,
-  controller: Function
-}
+export default (config: RouterConfigObjProps) => {
+  const { app, controller: promiseController } = config;
 
-interface loadedUserComponentParams {
-  match: match
-}
-
-export default (config: configProps) => {
-  const { app, controller: promiseController } = config
-
-  const loadedUserComponent = ({ match }: loadedUserComponentParams) => {
+  const loadedUserComponent = ({ routerMatch }: LoadedUserComponentProps) => {
     return promiseController().then(async (controller: any) => {
-      const Controller = controller.default;
-      const instance = new Controller();
+      const controllerDefault = controller.default;
+      const instance = new controllerDefault();
 
       try {
-        await instance._init({ app, match });
-        return instance._render();
-      } catch(err) {
+        await instance.init({ app, routerMatch });
+        return instance.render();
+      } catch (err) {
+        // tslint:disable-next-line:no-console
         console.error(err.msg);
         return false;
       }
-    })
-  }
+    });
+  };
 
   // 注意组件props的执行时机
   // 载入“动态组件(DynamicComponent)”之后再去加载controller组件
-  return (props: RouteComponentProps) => <DynamicComponent loadedUserComponent={loadedUserComponent} {...props} />
-}
+  return (props: RouteComponentProps) =>
+    <DynamicComponent loadedUserComponent={loadedUserComponent} routerMatch={props.match} />;
+};
