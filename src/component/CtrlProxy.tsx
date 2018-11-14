@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { PropsStrFun } from '../types/index';
 
 interface CtrlProxyProps {
   controller: any;
@@ -22,7 +21,7 @@ export default class CtrlProxy extends React.Component<CtrlProxyProps> {
     this.emit('pageWillUnMount');
   }
 
-  render(): () => void {
+  render(): null {
     return null;
   }
 

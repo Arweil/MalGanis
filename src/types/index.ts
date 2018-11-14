@@ -1,4 +1,4 @@
-import { Store, Middleware, Action, ReducersMapObject } from 'redux';
+import { Store, ReducersMapObject } from 'redux';
 import { History } from 'history';
 import { match } from 'react-router-dom';
 

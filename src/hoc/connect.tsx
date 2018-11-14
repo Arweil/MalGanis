@@ -5,7 +5,7 @@ interface ConnectorState {
   stateProps: object;
 }
 
-export function mvcConnect(mapToProps: Function) {
+export function mvcConnect(mapToProps: (args: any) => object) {
   return (WrappedComponent: React.ComponentClass): React.ComponentClass<any, any> => {
     class MVCConnector extends React.Component<any, ConnectorState> {
       static contextTypes = {
@@ -22,7 +22,7 @@ export function mvcConnect(mapToProps: Function) {
           stateProps: {},
         };
 
-        this.unsubscribe = null;
+        this.unsubscribe = () => { return; };
       }
 
       componentWillMount() {

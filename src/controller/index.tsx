@@ -22,7 +22,15 @@ export default class BaseController {
 
   constructor() {
     this.view = () => null;
-    this.model = null;
+    this.store = {
+      getState: () => { return; },
+      actions: {},
+    };
+    this.model = {
+      namespace: '',
+      state: {},
+      reducers: {},
+    };
 
     this.events = {};
 
@@ -30,22 +38,15 @@ export default class BaseController {
     this.cookie = jsCookie.default;
     this.queryString = queryString;
 
-    this.history = null;
+    this.history = {};
 
     this.location = {};
+
+    this.getInitialState = state => Promise.resolve(state);
+    this.pageBeforeRender = () => Promise.resolve();
   }
 
-  // 绑定 handler 的 this 值为 controller 实例
-  combineEvents(source: PropsStrAny) {
-    Object.keys(source).forEach((key) => {
-      const value = source[key];
-      if (key.startsWith('on') && typeof value === 'function') {
-        this.events[key] = value.bind(this);
-      }
-    });
-  }
-
-  private async init({ app, routerMatch }: InitFunParams) {
+  public async init({ app, routerMatch }: InitFunParams) {
     // 处理页面初始化state
     if (this.getInitialState) {
       const newState = await this.getInitialState(this.model.state).catch(() => {
@@ -87,10 +88,10 @@ export default class BaseController {
     };
   }
 
-  private async render() {
+  public async render() {
     // pageBeforeRender 生命周期
     if (this.pageBeforeRender) {
-      const newState = await this.pageBeforeRender().catch(() => {
+      await this.pageBeforeRender().catch(() => {
         return Promise.reject({
           msg: 'life cycle pageBeforeRender error',
         });
@@ -103,10 +104,20 @@ export default class BaseController {
     };
 
     return (
-      <Root context={ componentContext } >
-        <ViewProxy view={ this.view } />
-        <CtrlProxy controller={ this } />
+      <Root context={componentContext} >
+        <ViewProxy view={this.view} />
+        <CtrlProxy controller={this} />
       </Root>
     );
+  }
+
+  // 绑定 handler 的 this 值为 controller 实例
+  private combineEvents(source: PropsStrAny) {
+    Object.keys(source).forEach((key) => {
+      const value = source[key];
+      if (key.startsWith('on') && typeof value === 'function') {
+        this.events[key] = value.bind(this);
+      }
+    });
   }
 }

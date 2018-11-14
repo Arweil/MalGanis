@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { match } from 'react-router-dom';
 import { DynamicComponentProps, DynamicComponentState } from '../types';
 
 export default class DynamicComponent

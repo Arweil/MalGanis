@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DynamicComponent from './component/DynamicComponent';
-import { RouteComponentProps, match } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { LoadedUserComponentProps, RouterConfigObjProps } from './types';
 
 export default (config: RouterConfigObjProps) => {
