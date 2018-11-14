@@ -7,8 +7,7 @@ import * as queryString from 'query-string';
 import * as isomorphicFetch from 'isomorphic-fetch';
 import { History } from 'history';
 import {
-  PropsStrFun,
-  PropsStrAny,
+  PropsStrFun, PropsStrAny,
   AppModelObjProps, CtrlStoreObjProps, CtrlLocationObjProps, InitFunParams } from '../types';
 
 export default class BaseController {

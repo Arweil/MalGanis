@@ -29,12 +29,6 @@ export interface AppFunParams {
   el: string;
 }
 
-export interface BaseRenderFunParams {
-  store: Store;
-  history: History<any>;
-  appRouter: ({ app, history }: { app: object; history: History<any> }) => React.ReactNode;
-}
-
 export interface AppModelObjProps {
   namespace: string;
   state: object;
@@ -87,7 +81,7 @@ export interface ViewComponentProps {
 export interface ViewProxyComponentProps {
   events: object;
   state: object;
-  view: React.ComponentClass<ViewComponentProps, object>;
+  view: React.ComponentClass<ViewComponentProps, {}>;
 }
 
 export interface MVCConnectorComponentState {
