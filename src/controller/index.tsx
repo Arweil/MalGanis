@@ -4,18 +4,24 @@ import ViewProxy from '../component/ViewProxy';
 import Root from '../component/Root';
 import * as jsCookie from 'js-cookie';
 import * as queryString from 'query-string';
-import { PropsStrFun, PropsStrAny } from '../types/index';
-import { AppModelObjProps, CtrlStoreObjProps, InitFunParams } from '../types';
+import * as isomorphicFetch from 'isomorphic-fetch';
+import { History } from 'history';
+import {
+  PropsStrFun,
+  PropsStrAny,
+  AppModelObjProps, CtrlStoreObjProps, CtrlLocationObjProps, InitFunParams } from '../types';
 
 export default class BaseController {
   protected view: React.SFC;
   protected model: AppModelObjProps;
   protected store: CtrlStoreObjProps;
   protected events: PropsStrFun;
-  protected cookie: any;
-  protected queryString: any;
-  protected history: object;
-  protected location: object;
+  protected history: History<any>;
+  protected location: CtrlLocationObjProps;
+
+  protected cookie: typeof jsCookie;
+  protected queryString: typeof queryString;
+  protected fetch: typeof fetch;
 
   protected getInitialState: (state: any) => Promise<any>;
   protected pageBeforeRender: () => Promise<any>;
@@ -33,14 +39,17 @@ export default class BaseController {
     };
 
     this.events = {};
-
     // @ts-ignore
-    this.cookie = jsCookie.default;
+    this.history = null;
+    this.location = {
+      query: {},
+      hash: {},
+      params: {},
+    };
+
+    this.cookie = jsCookie;
     this.queryString = queryString;
-
-    this.history = {};
-
-    this.location = {};
+    this.fetch = isomorphicFetch.default;
 
     this.getInitialState = state => Promise.resolve(state);
     this.pageBeforeRender = () => Promise.resolve();

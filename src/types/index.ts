@@ -1,6 +1,7 @@
 import { Store, ReducersMapObject } from 'redux';
 import { History } from 'history';
 import { match } from 'react-router-dom';
+import { OutputParams } from 'query-string';
 
 export interface PropsStrFun {
   [propName: string]: () => void;
@@ -17,7 +18,7 @@ export interface PropsStrAny {
 // app interfaces
 export interface AppObjProps {
   _store: Store;
-  _history: object;
+  _history: History<any>;
   _appReducer: ReducersMapObject;
   mergeReducer: (m: AppModelObjProps) => void;
 }
@@ -69,6 +70,12 @@ export interface CtrlStoreObjProps {
 export interface InitFunParams {
   app: AppObjProps;
   routerMatch: match;
+}
+
+export interface CtrlLocationObjProps {
+  query: OutputParams;
+  hash: OutputParams;
+  params: {};
 }
 
 // view interfaces

@@ -3,7 +3,6 @@ import * as ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
-import { History } from 'history';
 
 import mergeReducerObj from './model/mergeReducerObj';
 import { AppObjProps, AppModelObjProps, AppFunParams } from './types';
@@ -30,7 +29,7 @@ export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | vo
     return combineReducers(reducers);
   }
 
-  const history: History = createBrowserHistory({
+  const history = createBrowserHistory({
     getUserConfirmation: (message, callback) => callback(window.confirm(message)),
   });
 
@@ -72,7 +71,7 @@ export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | vo
   /**
    * 应用最高层组件
    */
-  const baseRender = () => {
+  const baseRender = (): React.SFC => {
     return () => (
       <Provider store={store}>
         <ConnectedRouter history={history}>

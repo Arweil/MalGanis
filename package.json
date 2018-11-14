@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "history": "^4.7.2",
+    "isomorphic-fetch": "^2.2.1",
     "js-cookie": "^2.2.0",
     "prop-types": "^15.6.2",
     "query-string": "^6.2.0",
@@ -32,6 +33,7 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@types/history": "^4.7.1",
+    "@types/isomorphic-fetch": "0.0.34",
     "@types/js-cookie": "^2.2.0",
     "@types/query-string": "^6.1.1",
     "@types/react": "^16.4.16",
