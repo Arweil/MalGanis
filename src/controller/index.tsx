@@ -11,8 +11,8 @@ import {
   AppModelObjProps, CtrlStoreObjProps, CtrlLocationObjProps, InitFunParams } from '../types';
 
 export default class BaseController {
-  protected view: React.SFC;
-  protected model: AppModelObjProps;
+  protected View: React.SFC;
+  protected Model: AppModelObjProps;
   protected store: CtrlStoreObjProps;
   protected events: PropsStrFun;
   protected history: History<any>;
@@ -26,17 +26,17 @@ export default class BaseController {
   protected pageBeforeRender: () => Promise<any>;
 
   constructor() {
-    this.view = () => null;
-    this.store = {
-      getState: () => { return; },
-      actions: {},
-    };
-    this.model = {
+    this.View = () => null;
+    this.Model = {
       namespace: '',
       state: {},
       reducers: {},
     };
 
+    this.store = {
+      getState: () => { return; },
+      actions: {},
+    };
     this.events = {};
     // @ts-ignore
     this.history = null;
@@ -55,32 +55,28 @@ export default class BaseController {
   }
 
   public async init({ app, routerMatch }: InitFunParams) {
+    this.modelTypeInit();
+
     // 处理页面初始化state
     if (this.getInitialState) {
-      const newState = await this.getInitialState(this.model.state).catch(() => {
+      const newState = await this.getInitialState(this.Model.state).catch(() => {
         return Promise.reject({
           msg: 'life cycle getInitialState error',
         });
       });
-      this.model.state = newState;
+      this.Model.state = newState;
     }
 
     // bind events
     this.combineEvents(this);
 
     // create page reducer
-    if (this.model) {
-      this.model.namespace = this.model.namespace || this.constructor.name;
-      app.mergeReducer(this.model);
-    }
+    app.mergeReducer(this.Model);
 
-    this.store = {
-      getState: app._store.getState,
-      actions: {},
-    };
+    this.store.getState = app._store.getState;
 
     // store.actions
-    Object.keys(this.model.reducers || {}).forEach((reducerKey) => {
+    Object.keys(this.Model.reducers).forEach((reducerKey) => {
       this.store.actions[reducerKey] = (payload: object) => {
         app._store.dispatch({ type: reducerKey, ...payload });
       };
@@ -113,19 +109,31 @@ export default class BaseController {
 
     return (
       <Root context={componentContext} >
-        <ViewProxy view={this.view} />
+        <ViewProxy view={this.View} />
         <CtrlProxy controller={this} />
       </Root>
     );
   }
 
   // 绑定 handler 的 this 值为 controller 实例
-  private combineEvents(source: PropsStrAny) {
+  protected combineEvents(source: PropsStrAny) {
     Object.keys(source).forEach((key) => {
       const value = source[key];
       if (key.startsWith('on') && typeof value === 'function') {
         this.events[key] = value.bind(this);
       }
     });
+  }
+
+  /**
+   * 对this.Model进行简单的类型的初始化处理
+   *
+   * @private
+   * @memberof BaseController
+   */
+  private modelTypeInit() {
+    this.Model.namespace = this.Model.namespace || this.constructor.name;
+    this.Model.state = this.Model.state || {};
+    this.Model.reducers = this.Model.reducers || {};
   }
 }

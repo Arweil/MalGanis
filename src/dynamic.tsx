@@ -16,7 +16,7 @@ export default (config: RouterConfigObjProps) => {
         return instance.render();
       } catch (err) {
         // tslint:disable-next-line:no-console
-        console.error(err.msg);
+        console.error(err);
         return false;
       }
     });

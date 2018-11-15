@@ -24,7 +24,7 @@ export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | vo
   const middleware = routerMiddleware(history);
 
   const store = createStore(
-    createReducer(),
+    combineReducers({ router: routerReducer }),
     compose(
       applyMiddleware(middleware),
       // @ts-ignore: redux dev tools
