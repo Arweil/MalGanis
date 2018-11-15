@@ -11,7 +11,7 @@ const dirDevelop = ['src/**'];
 const dirDevelopJS = ['src/**/*.js'];
 const dirDevelopTS = ['src/**/*.ts', 'src/**/*.tsx'];
 const dirPublish = 'lib'
-const copyFiles = ['package.json']
+const copyFiles = ['package.json', 'README.md']
 
 const { log } = console;
 const tsProject = ts.createProject('tsconfig.json');

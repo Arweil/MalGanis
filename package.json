@@ -1,13 +1,12 @@
 {
   "name": "malganis",
-  "version": "1.0.0",
+  "version": "1.0.1-beta.01",
   "description": "React MVC Framework",
   "browser": "index.js",
   "homepage": "https://github.com/Arweil/MalGanis",
   "scripts": {
     "watch": "gulp watch",
-    "build": "gulp build",
-    "publish": "npm publish ./lib"
+    "build": "gulp build"
   },
   "author": "Milk",
   "license": "ISC",
