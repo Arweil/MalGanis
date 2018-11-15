@@ -26,6 +26,7 @@ export function mvcConnect(mapToProps: (args: any) => object) {
       }
 
       componentWillMount() {
+        // @ts-ignore
         const { store } = this.context;
         this.updateProps();
         this.unsubscribe = store.subscribe(() => this.updateProps());
@@ -40,6 +41,7 @@ export function mvcConnect(mapToProps: (args: any) => object) {
       }
 
       private updateProps() {
+        // @ts-ignore
         const { store, events, actions } = this.context;
         const stateProps = mapToProps({
           events,

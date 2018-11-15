@@ -1,0 +1,22 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "dependencies": {
+    "antd": "^3.9.3",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-hot-loader": "^4.3.4"
+  },
+  "scripts": {
+    "start": "jaraxxus start",
+    "build": "jaraxxus build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.1.1"
+  }
+}

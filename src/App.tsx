@@ -17,6 +17,28 @@ import {
  * 创建app
  */
 export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | void => {
+  const history = createBrowserHistory({
+    getUserConfirmation: (message, callback) => callback(window.confirm(message)),
+  });
+
+  const middleware = routerMiddleware(history);
+
+  const store = createStore(
+    createReducer(),
+    compose(
+      applyMiddleware(middleware),
+      // @ts-ignore: redux dev tools
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    )
+  );
+
+  const app: AppObjProps = {
+    mergeReducer,
+    _store: store,
+    _history: history,
+    _appReducer: {},
+  };
+
   /**
    * 创建app全局reducer
    */
@@ -29,23 +51,7 @@ export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | vo
     return combineReducers(reducers);
   }
 
-  const history = createBrowserHistory({
-    getUserConfirmation: (message, callback) => callback(window.confirm(message)),
-  });
-
-  const middleware = routerMiddleware(history);
-
   // app._appReducer['app'] = appStore;
-
-  /* eslint-disable no-underscore-dangle */
-  const store = createStore(
-    createReducer(),
-    compose(
-      applyMiddleware(middleware),
-      // @ts-ignore: redux dev tools
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
-  );
 
   /**
    * 合并页面reducer
@@ -60,13 +66,6 @@ export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | vo
 
     app._store.replaceReducer(createReducer());
   }
-
-  const app: AppObjProps = {
-    mergeReducer,
-    _store: store,
-    _history: history,
-    _appReducer: {},
-  };
 
   /**
    * 应用最高层组件
