@@ -27,7 +27,8 @@ SSR可以使首屏渲染速度更快，而且有利于seo。但是针对中后�
 ```
 
 ## 页面生命周期
-* getInitialState   改变初始state
+* getGlobalInitialState   改变全局初始state
+* getPageInitialState     改变页面初始state
 * pageBeforeRender  权限鉴定
 * pageWillMount     页面将要载入
 * pageDidMount      页面载入完毕，document加载完毕
