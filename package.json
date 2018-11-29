@@ -1,6 +1,6 @@
 {
   "name": "malganis",
-  "version": "1.0.1-beta.01",
+  "version": "1.0.1-beta.02",
   "description": "React MVC Framework",
   "browser": "index.js",
   "homepage": "https://github.com/Arweil/MalGanis",
