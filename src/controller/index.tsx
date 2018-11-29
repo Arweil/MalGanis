@@ -79,6 +79,7 @@ export default class BaseController {
               reducers: {},
             });
           } else {
+            // tslint:disable-next-line:no-console
             console.warn('warn in getGlobalInitialState, must has namespace in type AppModelObjProps');
           }
         });
