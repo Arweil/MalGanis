@@ -9,9 +9,9 @@ class ViewProxy extends React.Component<ViewProxyComponentProps> {
 
   render() {
     const View = this.props.view;
-    const { events, state } = this.props;
+    const { events, stateInPage, stateInGlobal } = this.props;
     return (
-      <View events={events} state={state} />
+      <View events={events} stateInPage={stateInPage} stateInGlobal={stateInGlobal} />
     );
   }
 }

@@ -7,6 +7,8 @@ import { createBrowserHistory } from 'history';
 import mergeReducerObj from './model/mergeReducerObj';
 import { AppObjProps, AppModelObjProps, AppFunParams } from './types';
 
+import { addPrefixInReducers } from './model/prefix';
+
 import {
   ConnectedRouter,
   routerReducer,
@@ -16,7 +18,7 @@ import {
 /**
  * 创建app
  */
-export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | void => {
+export default ({ appRouter, el }: AppFunParams): React.ReactNode | void => {
   const history = createBrowserHistory({
     getUserConfirmation: (message, callback) => callback(window.confirm(message)),
   });
@@ -51,8 +53,6 @@ export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | vo
     return combineReducers(reducers);
   }
 
-  // app._appReducer['app'] = appStore;
-
   /**
    * 合并页面reducer
    * @param {*} m model
@@ -62,7 +62,9 @@ export default ({ appRouter, appStore, el }: AppFunParams): React.ReactNode | vo
       return;
     }
 
-    app._appReducer[m.namespace] = mergeReducerObj(m.reducers, m.state);
+    const newReducers = addPrefixInReducers(m.namespace, m.reducers);
+
+    app._appReducer[m.namespace] = mergeReducerObj(newReducers, m.state);
 
     app._store.replaceReducer(createReducer());
   }

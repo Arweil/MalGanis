@@ -9,6 +9,7 @@ import { History } from 'history';
 import {
   PropsStrFun, PropsStrAny,
   AppModelObjProps, CtrlStoreObjProps, CtrlLocationObjProps, InitFunParams } from '../types';
+import { dispatchPrefix } from '../model/prefix';
 
 export default class BaseController {
   protected View: React.SFC;
@@ -22,9 +23,6 @@ export default class BaseController {
   protected queryString: typeof queryString;
   protected fetch: typeof fetch;
 
-  protected getInitialState: (state: any) => Promise<any>;
-  protected pageBeforeRender: () => Promise<any>;
-
   constructor() {
     this.View = () => null;
     this.Model = {
@@ -34,7 +32,8 @@ export default class BaseController {
     };
 
     this.store = {
-      getState: () => { return; },
+      getStateInGlobal: () => { return {}; },
+      getStateInPage: () => { return {}; },
       actions: {},
     };
     this.events = {};
@@ -49,38 +48,10 @@ export default class BaseController {
     this.cookie = jsCookie;
     this.queryString = queryString;
     this.fetch = isomorphicFetch.default;
-
-    this.getInitialState = state => Promise.resolve(state);
-    this.pageBeforeRender = () => Promise.resolve();
   }
 
   public async init({ app, routerMatch }: InitFunParams) {
     this.modelTypeInit();
-
-    // 处理页面初始化state
-    if (this.getInitialState) {
-      const newState = await this.getInitialState(this.Model.state).catch(() => {
-        return Promise.reject({
-          msg: 'life cycle getInitialState error',
-        });
-      });
-      this.Model.state = newState;
-    }
-
-    // bind events
-    this.combineEvents(this);
-
-    // create page reducer
-    app.mergeReducer(this.Model);
-
-    this.store.getState = app._store.getState;
-
-    // store.actions
-    Object.keys(this.Model.reducers).forEach((reducerKey) => {
-      this.store.actions[reducerKey] = (payload: object) => {
-        app._store.dispatch({ type: reducerKey, ...payload });
-      };
-    });
 
     // create history
     this.history = app._history;
@@ -90,11 +61,78 @@ export default class BaseController {
       hash: this.queryString.parse(window.location.hash),
       params: routerMatch.params,
     };
+
+    // @ts-ignore
+    if (this.getGlobalInitialState) {
+      // @ts-ignore
+      const newGlobalModelArr: AppModelObjProps[] = await this.getGlobalInitialState().catch((ex: any) => {
+        return Promise.reject(ex || {
+          msg: 'life cycle getGlobalInitialState error',
+        });
+      });
+      if (newGlobalModelArr) {
+        newGlobalModelArr.forEach((globalModelItem: AppModelObjProps) => {
+          if (globalModelItem.namespace) {
+            app.mergeReducer({
+              namespace: globalModelItem.namespace,
+              state: globalModelItem.state || {},
+              reducers: {},
+            });
+          } else {
+            console.warn('warn in getGlobalInitialState, must has namespace in type AppModelObjProps');
+          }
+        });
+      }
+    }
+
+    // 处理页面初始化state
+    // @ts-ignore
+    if (this.getPageInitialState) {
+      // @ts-ignore
+      const newState = await this.getPageInitialState(this.Model.state).catch((ex: any) => {
+        return Promise.reject(ex || {
+          msg: 'life cycle getPageInitialState error',
+        });
+      });
+      this.Model.state = newState;
+    }
+
+    // bind events
+    this.combineEvents(this);
+
+    this.Model.reducers = {
+      ...this.Model.reducers,
+      UPDATE_STATE: (state, payload) => {
+        return {
+          ...state,
+          ...payload,
+        };
+      },
+    };
+
+    // create page reducer
+    app.mergeReducer(this.Model);
+
+    this.store.getStateInGlobal = app._store.getState;
+    this.store.getStateInPage = () => {
+      return app._store.getState()[this.Model.namespace];
+    };
+
+    const dispatch = dispatchPrefix(app._store.dispatch, this.Model);
+
+    // store.actions
+    Object.keys(this.Model.reducers).forEach((reducerKey) => {
+      this.store.actions[reducerKey] = (payload: object) => {
+        dispatch({ type: reducerKey, ...payload });
+      };
+    });
   }
 
   public async render() {
     // pageBeforeRender 生命周期
+    // @ts-ignore
     if (this.pageBeforeRender) {
+      // @ts-ignore
       await this.pageBeforeRender().catch(() => {
         return Promise.reject({
           msg: 'life cycle pageBeforeRender error',
@@ -109,7 +147,7 @@ export default class BaseController {
 
     return (
       <Root context={componentContext} >
-        <ViewProxy view={this.View} />
+        <ViewProxy view={this.View} namespace={this.Model.namespace} />
         <CtrlProxy controller={this} />
       </Root>
     );

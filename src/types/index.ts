@@ -25,7 +25,6 @@ export interface AppObjProps {
 
 export interface AppFunParams {
   appRouter: ({ app, history }: { app: object; history: History<any> }) => React.ReactNode;
-  appStore: {};
   el: string;
 }
 
@@ -57,7 +56,8 @@ export interface DynamicComponentState {
 
 // controller interfaces
 export interface CtrlStoreObjProps {
-  getState: () => any;
+  getStateInGlobal: () => any;
+  getStateInPage: () => any;
   actions: ReducersMapObject;
 }
 
@@ -75,12 +75,14 @@ export interface CtrlLocationObjProps {
 // view interfaces
 export interface ViewComponentProps {
   events: object;
-  state: object;
+  stateInPage: object;
+  stateInGlobal: object;
 }
 
 export interface ViewProxyComponentProps {
   events: object;
-  state: object;
+  stateInPage: object;
+  stateInGlobal: object;
   view: React.ComponentClass<ViewComponentProps, {}>;
 }
 

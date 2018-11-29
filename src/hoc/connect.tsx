@@ -41,10 +41,12 @@ export function mvcConnect(mapToProps: (args: any) => object) {
 
       private updateProps() {
         const { store, events, actions } = this.context;
+        const stateInGlobal = store.getState();
         const stateProps = mapToProps({
           events,
           actions,
-          state: store.getState(),
+          stateInPage: stateInGlobal[this.props.namespace],
+          stateInGlobal,
         });
 
         this.setState({

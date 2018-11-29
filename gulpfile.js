@@ -35,12 +35,13 @@ function babelTask() {
 // handle typescript
 function tsTask() {
   const tsResult = gulp.src(dirDevelopTS)
-    .pipe(tsProject());
+    .pipe(plumber())
+    .pipe(tsProject())
   
   return merge([
     tsResult.dts.pipe(gulp.dest(dirPublish)), // create *.d.ts
     tsResult.js.pipe(gulp.dest(dirPublish)), // create *.js
-  ]);
+  ]).pipe(plumber.stop());
 }
 
 function scriptTask() {
