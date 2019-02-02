@@ -142,8 +142,8 @@ export default class BaseController {
     }
 
     const componentContext = {
-      events: this.events,
       actions: this.store.actions,
+      events: this.events,
     };
 
     return (

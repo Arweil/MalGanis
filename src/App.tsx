@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose, Store } from 'redux';
 import { Provider } from 'react-redux';
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory, createHashHistory, History, HashHistoryBuildOptions } from 'history';
 
 import mergeReducerObj from './model/mergeReducerObj';
-import { AppObjProps, AppModelObjProps, AppFunParams } from './types';
+import { AppObjProps, AppModelObjProps, AppFunParams, EnumHistoryMode } from './types';
 
 import { addPrefixInReducers } from './model/prefix';
 
@@ -18,21 +18,37 @@ import {
 /**
  * 创建app
  */
-export default ({ appRouter, el }: AppFunParams): React.ReactNode | void => {
-  const history = createBrowserHistory({
+export default ({ appRouter, el, historyMode }: AppFunParams): React.ReactNode | void => {
+  // 处理history mode
+  let _historyMode: (options?: HashHistoryBuildOptions | undefined) => History<any> = createBrowserHistory;
+
+  if (historyMode === EnumHistoryMode.hash) {
+    _historyMode = createHashHistory;
+  }
+
+  const history = _historyMode({
     getUserConfirmation: (message, callback) => callback(window.confirm(message)),
   });
 
   const middleware = routerMiddleware(history);
 
-  const store = createStore(
-    combineReducers({ router: routerReducer }),
-    compose(
-      applyMiddleware(middleware),
+  // 处理store
+  let store: Store;
+  // @ts-ignore: redux dev tools
+  if (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION__) {
+    store = createStore(
+      combineReducers({ router: routerReducer }),
       // @ts-ignore: redux dev tools
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
-  );
+      compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__())
+    );
+  } else {
+    store = createStore(
+      combineReducers({ router: routerReducer }),
+      compose(
+        applyMiddleware(middleware)
+      )
+    );
+  }
 
   const app: AppObjProps = {
     mergeReducer,

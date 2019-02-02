@@ -9,8 +9,8 @@ export function mvcConnect(mapToProps: (args: any) => object) {
   return (WrappedComponent: React.ComponentClass): React.ComponentClass<any, any> => {
     class MVCConnector extends React.Component<any, ConnectorState> {
       static contextTypes = {
-        events: PropTypes.object,
         actions: PropTypes.object,
+        events: PropTypes.object,
         store: PropTypes.object,
       };
 

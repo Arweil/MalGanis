@@ -23,9 +23,15 @@ export interface AppObjProps {
   mergeReducer: (m: AppModelObjProps) => void;
 }
 
+export enum EnumHistoryMode {
+  hash = 'hash',
+  browser = 'browser',
+}
+
 export interface AppFunParams {
   appRouter: ({ app, history }: { app: object; history: History<any> }) => React.ReactNode;
   el: string;
+  historyMode: EnumHistoryMode;
 }
 
 export interface AppModelObjProps {
